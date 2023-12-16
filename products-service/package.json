@@ -1,0 +1,17 @@
+{
+    "name": "products-service",
+    "version": "1.0.0",
+    "description": "Microservice for managing information about products",
+    "main": "products-service.js",
+    "scripts": {
+        "start": "node products-service.js",
+        "test": "jest"
+    },
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0",
+        "supertest": "^6.3.3"
+    }
+}

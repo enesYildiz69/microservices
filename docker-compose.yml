@@ -1,0 +1,19 @@
+version: '3'
+services:
+  products-service:
+    build: ./products-service
+    ports:
+      - '3001:3001'
+
+  orders-service:
+    build: ./orders-service
+    ports:
+      - '3002:3002'
+
+  frontend-service:
+    build: ./frontend-service
+    ports:
+      - '3000:3000'
+    depends_on:
+      - products-service
+      - orders-service
