@@ -19,13 +19,14 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Transfer files to EC2
-        run: scp -o StrictHostKeyChecking=no -r . ec2-user@3.121.112.56:/home/ec2-user/app
+        run: |
+          rsync -av --exclude=.git --exclude=.github --exclude=.gitignore . ec2-user@3.121.112.56:/path/to/your/app
 
       - name: Connect to EC2 instance
         run: ssh -o StrictHostKeyChecking=no -A ec2-user@3.121.112.56
 
       - name: Deploy application
         run: |
-          cd /home/ec2-user/app
+          cd /path/to/your/app
           docker-compose pull
           docker-compose up -d
