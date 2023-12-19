@@ -27,14 +27,16 @@ jobs:
 
       - name: Build and Test
         run: |
-          if [ ${{ github.event_name == 'push' && github.ref == 'refs/heads/frontend-service' }} ]; then
-            docker-compose up --build -d
-          elif [ ${{ github.event_name == 'push' && (github.ref == 'refs/heads/products-service') }} ]; then
-            cd products-service
-            npm install
-            npm test
-          elif [ ${{ github.event_name == 'push' && (github.ref == 'refs/heads/orders-service') }} ]; then
-            cd orders-service
-            npm install
-            npm test
+          if [ "${{ github.event_name }}" == "push" ]; then
+            if [ "${{ github.ref }}" == "refs/heads/frontend-service" ]; then
+              docker-compose up --build -d
+            elif [ "${{ github.ref }}" == "refs/heads/products-service" ]; then
+              cd products-service
+              npm install
+              npm test
+            elif [ "${{ github.ref }}" == "refs/heads/orders-service" ]; then
+              cd orders-service
+              npm install
+              npm test
+            fi
           fi
