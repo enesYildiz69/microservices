@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/enesyildiz/frontend-service:latest
+        image: microservices-example-frontend-service:latest
         ports:
         - containerPort: 3000
