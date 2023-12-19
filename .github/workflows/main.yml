@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Kubernetes Deployment
 
 on:
   push:
@@ -10,29 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Repository
       uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '14'
+    - name: Set up Kubernetes
+      uses: azure/setup-k8s@v1
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
 
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install docker-ce
-
-      - name: Build and Test
-        run: |
-          if [ ${{ github.event_name == 'push' && github.ref == 'refs/heads/frontend-service' }} ]; then
-            docker-compose up --build -d
-          elif [ ${{ github.event_name == 'push' && (github.ref == 'refs/heads/products-service') }} ]; then
-            cd products-service
-            npm install
-            npm test
-          elif [ ${{ github.event_name == 'push' && (github.ref == 'refs/heads/orders-service') }} ]; then
-            cd orders-service
-            npm install
-            npm test
-          fi
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f kubernetes/frontend-deployment.yml
+        kubectl apply -f kubernetes/orders-deployment.yml
+        kubectl apply -f kubernetes/products-deployment.yml

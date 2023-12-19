@@ -1,32 +1,19 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: products-service
-spec:
-  selector:
-    app: products-service
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3001
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: products-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: products-service
+      app: products
   template:
     metadata:
       labels:
-        app: products-service
+        app: products
     spec:
       containers:
-        - name: products-container
-          image: your-registry/products-service:latest
-          ports:
-            - containerPort: 3001
+      - name: products
+        image: docker.io/enesyildiz/products-service:latest
+        ports:
+        - containerPort: 3001
