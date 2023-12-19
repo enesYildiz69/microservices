@@ -19,4 +19,4 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Connect to EC2 instance
-        run: ssh -o StrictHostKeyChecking=no -A ec2-user@3.121.112.56 "cd /home/ec2-user/app && git clone https://github.com/enesYildiz69/microservices.git && cd microservices && docker-compose up -d"
+        run: ssh -o StrictHostKeyChecking=no -A ec2-user@3.121.112.56 "cd /home/ec2-user/app && git clone https://github.com/enesYildiz69/microservices.git && cd microservices && sudo docker-compose up -d"
