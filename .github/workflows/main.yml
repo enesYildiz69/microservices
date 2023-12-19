@@ -19,7 +19,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Connect to EC2 instance
-        run: ssh -o StrictHostKeyChecking=no -A -tt user@3.121.112.56
+        run: ssh -o StrictHostKeyChecking=no -A -tt ec2-user@3.121.112.56
 
       - name: Deploy application
         run: docker-compose up -d
