@@ -21,6 +21,6 @@ jobs:
       - name: Deploy application
         run: |
           ssh -o StrictHostKeyChecking=no -A ec2-user@3.121.112.56 '
-            cd /path/to/your/app
+            cd /home/ec2-user/app
             docker-compose pull
             docker-compose up -d'
