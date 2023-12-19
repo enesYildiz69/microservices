@@ -1,23 +1,42 @@
+name: CI/CD
+
 on:
   push:
     branches:
+      - main
       - 'frontend-service'
+      - 'products-service'
+      - 'orders-service'
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          node-version: '14'
 
-      - name: Connect to EC2 instance
-        run: ssh -o StrictHostKeyChecking=no -A -tt user@3.121.112.56
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install docker-ce
 
-      - name: Deploy application
-        run: docker-compose up -d
+      - name: Build and Test
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            if [ "${{ github.ref }}" == "refs/heads/frontend-service" ]; then
+              ssh -o StrictHostKeyChecking=no -i secrets.SSH_PRIVATE_KEY ec2-user@3.121.112.56 'docker-compose pull && docker-compose up -d'
+            elif [ "${{ github.ref }}" == "refs/heads/products-service" ]; then
+              cd products-service
+              npm install
+              npm test
+            elif [ "${{ github.ref }}" == "refs/heads/orders-service" ]; then
+              cd orders-service
+              npm install
+              npm test
+            fi
+          fi
