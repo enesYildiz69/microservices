@@ -31,6 +31,7 @@ jobs:
             if [ "${{ github.ref }}" == "refs/heads/frontend-service" ]; then
               echo "$SSH_PRIVATE_KEY" > /tmp/deploy_key.pem
               chmod 600 /tmp/deploy_key.pem
+              sed -i 's/ /\\ /g' /tmp/deploy_key.pem
               scp -o StrictHostKeyChecking=no -i /tmp/deploy_key.pem -r . ec2-user@3.121.112.56:/app
               ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key.pem ec2-user@3.121.112.56 'cd /app && docker-compose pull && docker-compose up -d'
             elif [ "${{ github.ref }}" == "refs/heads/products-service" ]; then
